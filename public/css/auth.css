@@ -1,0 +1,146 @@
+/* =============================================
+   AUTH — Khusus halaman login & register
+   ============================================= */
+
+body {
+    background-color: var(--bg-white);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--bg-white);
+    border: 1.5px solid var(--orange-primary);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2.2rem;
+}
+
+/* Register card lebih lebar karena dua kolom */
+.auth-card.auth-card--wide {
+    max-width: 560px;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.2rem;
+}
+
+.form-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 0.3rem;
+}
+
+.required-star {
+    color: var(--orange-primary);
+    margin-left: 2px;
+}
+
+.form-control,
+.form-select {
+    border-radius: var(--radius-md);
+    border: 1.2px solid var(--border-default);
+    font-size: 0.88rem;
+    padding: 0.55rem 0.85rem;
+    color: var(--text-mid);
+    transition: border-color 0.2s;
+}
+
+/* Tombol submit full width khusus auth */
+.btn-orange-full {
+    background-color: var(--orange-primary);
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.92rem;
+    border-radius: var(--radius-md);
+    padding: 0.65rem;
+    width: 100%;
+    transition: background-color 0.2s;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.btn-orange-full:hover {
+    background-color: var(--orange-hover);
+    color: #fff;
+}
+
+.auth-footer {
+    text-align: center;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    margin-top: 1.2rem;
+}
+
+.auth-footer a {
+    color: var(--orange-primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Upload KTP */
+.upload-area {
+    border: 1.5px solid var(--orange-primary);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--bg-white);
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.upload-area:hover {
+    background-color: var(--orange-light);
+}
+
+.upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-area.border-danger {
+    border-color: #dc3545;
+}
+
+.upload-text {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.upload-note {
+    font-size: 0.76rem;
+    color: var(--text-light);
+    margin-top: 0.4rem;
+    font-style: italic;
+}
+
+.file-format-note {
+    font-size: 0.76rem;
+    color: var(--text-light);
+}
+
+#preview-ktp {
+    max-width: 100%;
+    max-height: 120px;
+    border-radius: var(--radius-sm);
+    margin-top: 0.5rem;
+    display: none;
+}

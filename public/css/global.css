@@ -1,0 +1,213 @@
+/* =============================================
+   GLOBAL — Poppins font, variabel warna, utility
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --orange-primary  : #E8650A;
+    --orange-hover    : #cf5908;
+    --orange-light    : #fff3ec;
+    --orange-ultralight: #fffaf7;
+    --orange-shadow   : rgba(232, 101, 10, 0.10);
+    --orange-border   : rgba(232, 101, 10, 0.30);
+
+    --text-dark       : #1a1a1a;
+    --text-mid        : #333333;
+    --text-muted      : #888888;
+    --text-light      : #aaaaaa;
+
+    --border-default  : #dddddd;
+    --bg-white        : #ffffff;
+    --bg-light        : #f9f9f9;
+
+    --radius-sm       : 6px;
+    --radius-md       : 8px;
+    --radius-lg       : 14px;
+
+    --shadow-card     : 0 4px 24px rgba(232, 101, 10, 0.10);
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Tombol utama oranye */
+.btn-orange {
+    background-color: var(--orange-primary);
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.92rem;
+    border-radius: var(--radius-md);
+    padding: 0.6rem 1.2rem;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.btn-orange:hover {
+    background-color: var(--orange-hover);
+    color: #fff;
+}
+
+.btn-orange-outline {
+    background-color: transparent;
+    border: 1.5px solid var(--orange-primary);
+    color: var(--orange-primary);
+    font-weight: 500;
+    font-size: 0.88rem;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.btn-orange-outline:hover {
+    background-color: var(--orange-primary);
+    color: #fff;
+}
+
+/* Badge status */
+.badge-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-aktif      { background-color: #d1fae5; color: #065f46; }
+.badge-nonaktif   { background-color: #f3f4f6; color: #6b7280; }
+.badge-menunggu   { background-color: #fef3c7; color: #92400e; }
+.badge-dikirim    { background-color: #fef3c7; color: #92400e; }
+.badge-diterima   { background-color: #d1fae5; color: #065f46; }
+.badge-ditolak    { background-color: #fee2e2; color: #991b1b; }
+.badge-diajukan   { background-color: #fef3c7; color: #92400e; }
+.badge-diproses   { background-color: #dbeafe; color: #1e40af; }
+.badge-selesai    { background-color: #d1fae5; color: #065f46; }
+.badge-tersedia   { background-color: #d1fae5; color: #065f46; }
+.badge-terisi     { background-color: #fee2e2; color: #991b1b; }
+.badge-reservasi  { background-color: #ede9fe; color: #5b21b6; }
+.badge-perpanjangan { background-color: #dbeafe; color: #1e40af; }
+
+/* Input focus global */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    font-size: 0.78rem;
+}
+
+/* Alert flash */
+.alert-success-custom {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius-md);
+    color: #166534;
+    font-size: 0.83rem;
+    padding: 0.65rem 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.alert-error-custom {
+    background-color: #fff3f0;
+    border: 1px solid var(--orange-hover);
+    border-radius: var(--radius-md);
+    color: #c0392b;
+    font-size: 0.83rem;
+    padding: 0.65rem 0.9rem;
+    margin-bottom: 1rem;
+}
+/* ── Pagination ── */
+.pagination-wrap {
+    padding: 0.8rem 0 0.2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination {
+    gap: 0.25rem;
+    margin: 0;
+}
+
+.page-link {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    color: #555;
+    border: 1.2px solid #ddd;
+    border-radius: 6px !important;
+    padding: 0.3rem 0.65rem;
+    line-height: 1.5;
+    transition: all 0.15s;
+    /* Paksa ukuran ikon/teks tetap kecil */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+}
+
+.page-link svg,
+.page-link span[aria-hidden] {
+    width: 12px;
+    height: 12px;
+    font-size: 0.75rem;
+}
+
+.page-link:hover {
+    color: #E8650A;
+    border-color: #E8650A;
+    background-color: #fff3ec;
+}
+
+.page-item.active .page-link {
+    background-color: #E8650A;
+    border-color: #E8650A;
+    color: #fff;
+}
+
+.page-item.disabled .page-link {
+    color: #ccc;
+    border-color: #ebebeb;
+}
+
+/* Tombol form */
+.btn-admin-submit {
+    background: linear-gradient(135deg, #E8650A, #cf5908);
+    border: none;
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-admin-submit:hover {
+    opacity: 0.9;
+}
+
+.btn-admin-cancel {
+    background: #fff;
+    border: 1.2px solid #e8ddd5;
+    color: #666;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 0.6rem 1.5rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-admin-cancel:hover {
+    border-color: #aaa;
+    color: #333;
+}
