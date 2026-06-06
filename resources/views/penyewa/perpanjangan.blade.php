@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="{{ asset('css/penyewa.css') }}">
 
 <div class="container penyewa-page">
-
     <h1 class="penyewa-title">Perpanjangan Masa Sewa</h1>
     <p class="penyewa-subtitle">
         Kamar {{ $reservasi->kamar->nomor_kamar }} &nbsp;—&nbsp;
@@ -23,72 +22,59 @@
         <div class="alert-penyewa alert-error">{{ session('error') }}</div>
     @endif
 
-    <!-- TAGIHAN BULAN INI -->
-    @if($isBulanReservasi)
+    <!-- TAGIHAN SECTION -->
+    @php
+        $sudahLunas = $isBulanReservasi
+                    || ($pembayaranBulanIni && $pembayaranBulanIni->status === 'Diterima');
+        $menunggu   = $pembayaranBulanIni && $pembayaranBulanIni->status === 'Dikirim';
+        $ditolak    = $pembayaranBulanIni && $pembayaranBulanIni->status === 'Ditolak';
+        $cardClass  = $sudahLunas ? 'tagihan-card-lunas' : ($menunggu ? 'tagihan-card-menunggu' : 'tagihan-card-default');
 
-    <div class="tagihan-card mt-4" style="border-color: #10b981; background:#f0fdf4;">
+    @endphp
+
+    <div class="tagihan-card mt-4 {{ $cardClass }}">
         <div>
             <p class="tagihan-label">Tagihan</p>
             <p class="tagihan-bulan">
-                Sewa Bulan {{ \Carbon\Carbon::parse($bulanIni)->format('M Y') }}
+                Sewa Bulan {{ \Carbon\Carbon::parse($bulanIni)->isoFormat('MMMM Y') }}
             </p>
-        </div>
-        <span class="badge-status badge-diterima">Sudah Tercakup Reservasi</span>
-    </div>
-
-    @elseif(!$pembayaranBulanIni || $pembayaranBulanIni->status === 'Ditolak')
-
-        <div class="tagihan-card mt-4" style="border-color: #e5e7eb; background:#f9fafb;">
-            <div>
-                <p class="tagihan-label">Tagihan</p>
-                <p class="tagihan-bulan">
-                    Sewa Bulan {{ \Carbon\Carbon::parse($bulanIni)->format('M Y') }}
-                </p>
-            </div>
-            <p class="tagihan-harga">
-                Rp {{ number_format($reservasi->kamar->harga, 0, ',', '.') }}
-            </p>
-            <!-- @if($pembayaranBulanIni && $pembayaranBulanIni->status === 'Ditolak')
-                <p style="font-size:0.78rem; color:#ef4444; margin-bottom:0.4rem;">
+            @if($ditolak)
+                <p style="font-size:0.78rem; color:#ef4444; margin-top:0.3rem;">
                     Pembayaran sebelumnya ditolak.
                     @if($pembayaranBulanIni->catatan_admin)
                         Alasan: {{ $pembayaranBulanIni->catatan_admin }}
                     @endif
+                    Silakan kirim ulang.
                 </p>
-            @endif -->
-            <button type="button"
+            @endif
+        </div>
+
+        @if($sudahLunas)
+            {{-- Disabled, tidak bisa diklik --}}
+            <button type="button" class="btn-orange" disabled
+                    style="opacity:0.45; cursor:not-allowed;">
+                Sudah Dibayar
+            </button>
+
+        @elseif($menunggu)
+            <span class="badge-status badge-dikirim">Menunggu Konfirmasi</span>
+
+        @else
+        {{-- Belum bayar atau Ditolak --}}
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <p class="tagihan-harga" style="margin:0;">
+                Rp {{ number_format($reservasi->kamar->harga, 0, ',', '.') }}
+            </p>
+           <button type="button"
                     class="btn-orange"
+                    data-bulan="{{ $bulanIni }}"
                     data-bs-toggle="modal"
                     data-bs-target="#modalBayar">
                 Bayar Sewa
             </button>
         </div>
-
-    @elseif($pembayaranBulanIni->status === 'Dikirim')
-
-        <div class="tagihan-card mt-4" style="border-color: #f59e0b; background:#fffbeb;">
-            <div>
-                <p class="tagihan-label">Tagihan</p>
-                <p class="tagihan-bulan">
-                    Sewa Bulan {{ \Carbon\Carbon::parse($bulanIni)->format('M Y') }}
-                </p>
-            </div>
-            <span class="badge-status badge-dikirim">Menunggu Konfirmasi</span>
-        </div>
-    @else
-
-        <div class="tagihan-card mt-4" style="border-color: #10b981; background:#f0fdf4;">
-            <div>
-                <p class="tagihan-label">Tagihan</p>
-                <p class="tagihan-bulan">
-                    Sewa Bulan {{ \Carbon\Carbon::parse($bulanIni)->format('M Y') }}
-                </p>
-            </div>
-            <span class="badge-status badge-diterima">Lunas</span>
-        </div>
-
-    @endif
-
+        @endif
+    </div>
     <!-- RIWAYAT PEMBAYARAN -->
     <div class="table-penyewa-wrap">
         <table class="table-penyewa">
@@ -99,6 +85,7 @@
                     <th>Tanggal Bayar</th>
                     <th>Jumlah</th>
                     <th>Status</th>
+                    <th>Tanggal Konfirmasi Admin</th>
                     <th>Catatan Admin</th>
                     <th>Aksi</th>
                 </tr>
@@ -118,6 +105,11 @@
                         <span class="badge-status badge-{{ strtolower($p->status) }}">
                             {{ $p->status }}
                         </span>
+                    </td>
+                    <td>
+                        {{ $p->tanggal_konfirmasi
+                            ? \Carbon\Carbon::parse($p->tanggal_konfirmasi)->format('d M Y')
+                            : '-' }}
                     </td>
                     <td>
                         {{$p->catatan_admin ?? '-'}}
@@ -140,7 +132,6 @@
             </tbody>
         </table>
     </div>
-
 </div>
 
 <!-- MODAL BAYAR-->

@@ -29,7 +29,8 @@ use Illuminate\Support\Str;
                     <th>No.</th>
                     <th>Judul</th>
                     <th>Deskripsi Keluhan</th>
-                    <th>Tanggal Pengajuan</th>
+                    <th>Tanggal Diajukan</th>
+                    <th>Tanggal Update</th>
                     <th>Foto</th>
                     <th>Status</th>
                     <th>Tanggapan Admin</th>
@@ -45,6 +46,13 @@ use Illuminate\Support\Str;
                     </td>
                     <td>
                         {{ \Carbon\Carbon::parse($p->tanggal_pengaduan)->format('d M Y') }}
+                    </td>
+                    <td>
+                        @if($p->status === 'Diajukan')
+                            <span class="text-muted">-</span>
+                        @else
+                            {{ $p->tanggal_update? \Carbon\Carbon::parse($p->tanggal_update)->format('d M Y'): '-' }}                        
+                        @endif
                     </td>
                     <td>
                         @if($p->foto)
@@ -69,7 +77,7 @@ use Illuminate\Support\Str;
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="table-empty">
+                    <td colspan="8" class="table-empty">
                         Belum ada pengaduan. Klik "+ Tambah Pengaduan" untuk mengajukan.
                     </td>
                 </tr>

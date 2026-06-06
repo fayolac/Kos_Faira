@@ -37,12 +37,17 @@ class PembayaranController extends Controller
     //PUT Pembayaran
     public function update(Request $request, $id)
     {
+        $pembayaran = Pembayaran::findOrFail($id);
+        //Pembayaran diterima tidak boleh diubah ke ditolak
+        if ($pembayaran->status === 'Diterima') {
+            return redirect('/admin/verifikasi')
+                    ->with('error','Pembayaran yang sudah diterima tidak dapat diubah.');
+        }
+
         $request->validate([
             'status'       => 'required|in:Diterima,Ditolak',
             'catatan_admin'=> 'nullable|string|max:500',
         ]);
-
-        $pembayaran = Pembayaran::findOrFail($id);
 
         $pembayaran->update([
             'status'             => $request->status,
@@ -51,12 +56,14 @@ class PembayaranController extends Controller
         ]);
 
         $reservasi = $pembayaran->reservasi;
+
         if ($request->status === 'Diterima'
             && $pembayaran->tipe_pembayaran === 'Reservasi') {
-        $reservasiLama = Reservasi::where('id_penyewa', $reservasi->id_penyewa)
-                                ->where('status', 'Aktif')
-                                ->where('id_reservasi', '!=', $reservasi->id_reservasi)
-                                ->first();
+
+            $reservasiLama = Reservasi::where('id_penyewa', $reservasi->id_penyewa)
+                                    ->where('status', 'Aktif')
+                                    ->where('id_reservasi', '!=', $reservasi->id_reservasi)
+                                    ->first();
 
         if ($reservasiLama) {
             // Kembalikan kamar lama ke Tersedia dan nonaktifkan reservasi lama

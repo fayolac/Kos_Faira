@@ -88,61 +88,100 @@
             </div>
         </div>
 
-        {{-- ===== CARD KANAN: Verifikasi ===== --}}
+        <!-- CARD KANAN: Verifikasi -->
         <div class="section-card">
 
             <p class="pengaduan-section-label">VERIFIKASI</p>
 
-            <form action="/admin/pembayaran/{{ $pembayaran->id_pembayaran }}"
-                  method="POST">
-                @csrf
-                @method('PUT')
+            @if($pembayaran->status === 'Diterima')
 
-                {{-- Status --}}
-                <div class="mb-3">
-                    <label class="form-admin-label">
-                        Status pembayaran
-                    </label>
-                    <select name="status"
-                            class="form-admin-control @error('status') is-invalid @enderror">
-                        @foreach(['Diterima', 'Ditolak'] as $s)
-                        <option value="{{ $s }}"
-                                {{ old('status', $pembayaran->status) == $s ? 'selected' : '' }}>
-                            {{ $s }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <!-- Sudah diterima, tidak bisa diubah -->
+                <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:1.2rem;">
+                    <span class="badge-status badge-diterima">Diterima</span>
+                    <span style="font-size:0.82rem; color:#888;">
+                        Pembayaran telah dikonfirmasi
+                    </span>
                 </div>
 
-                {{-- Catatan Admin --}}
-                <div class="mb-4">
-                    <label class="form-admin-label">
-                        Catatan admin
-                        <span style="font-size:0.75rem; color:#aaa; font-weight:400;">
-                            (opsional)
-                        </span>
-                    </label>
-                    <textarea name="catatan_admin"
-                              class="form-admin-control @error('catatan_admin') is-invalid @enderror"
-                              rows="4"
-                              placeholder="Tambahkan catatan jika pembayaran ditolak atau ada informasi tambahan ...">{{ old('catatan_admin', $pembayaran->catatan_admin) }}</textarea>
-                    @error('catatan_admin')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <div style="background:#f0fdf4; border:1.5px solid #10b981;
+                            border-radius:10px; padding:1rem 1.2rem;
+                            font-size:0.85rem; color:#065f46; margin-bottom:1.5rem;">
+                    Pembayaran ini sudah berstatus <strong>Diterima</strong>
+                    dan tidak dapat diubah kembali.
                 </div>
 
-                {{-- Tombol --}}
-                <div style="display:flex; gap:0.75rem; align-items:center;">
-                    <a href="/admin/penyewa" class="btn-admin-cancel">Batal</a>
-                    <button type="submit" class="btn-admin-submit">
-                        Simpan Verifikasi
-                    </button>
-                </div>
+                @if($pembayaran->catatan_admin)
+                    <div class="mb-3">
+                        <p class="form-admin-label">Catatan admin</p>
+                        <p style="font-size:0.85rem; color:#555; margin:0;">
+                            {{ $pembayaran->catatan_admin }}
+                        </p>
+                    </div>
+                @endif
 
-            </form>
+                <a href="/admin/verifikasi" class="btn-admin-cancel">
+                    ← Kembali
+                </a>
+
+            @else
+
+                <!-- Status Dikirim / Ditolak -->
+                @if(session('error'))
+                    <div class="alert-admin alert-error mb-3">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <form action="/admin/pembayaran/{{ $pembayaran->id_pembayaran }}"
+                    method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label class="form-admin-label">Status pembayaran</label>
+                        <select name="status"
+                                class="form-admin-control @error('status') is-invalid @enderror">
+                            @foreach(['Diterima', 'Ditolak'] as $s)
+                                <option value="{{ $s }}"
+                                        {{ old('status', $pembayaran->status) == $s ? 'selected' : '' }}>
+                                    {{ $s }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('status')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Catatan Admin -->
+                    <div class="mb-4">
+                        <label class="form-admin-label">
+                            Catatan admin
+                            <span style="font-size:0.75rem; color:#aaa; font-weight:400;">
+                                (opsional)
+                            </span>
+                        </label>
+                        <textarea name="catatan_admin"
+                                class="form-admin-control @error('catatan_admin') is-invalid @enderror"
+                                rows="4"
+                                placeholder="Tambahkan catatan jika pembayaran ditolak atau ada informasi tambahan ...">{{ old('catatan_admin', $pembayaran->catatan_admin) }}</textarea>
+                        @error('catatan_admin')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Tombol -->
+                    <div style="display:flex; gap:0.75rem; align-items:center;">
+                        <a href="/admin/verifikasi" class="btn-admin-cancel">Batal</a>
+                        <button type="submit" class="btn-admin-submit">
+                            Simpan Verifikasi
+                        </button>
+                    </div>
+
+                </form>
+
+            @endif
 
         </div>
 

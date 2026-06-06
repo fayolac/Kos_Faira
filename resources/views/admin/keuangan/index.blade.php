@@ -4,11 +4,24 @@
 
 @section('content')
 
-    {{-- Page Header --}}
+    <!-- Page Header -->
     <h1 class="page-title">Data Keuangan</h1>
     <p class="page-subtitle">Rekap pemasukan dan pengeluaran operasional kos</p>
 
-    {{-- ===== CARD RINGKASAN ===== --}}
+    <!-- Filter -->
+     <form method="GET" action="/admin/keuangan" class="mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <label class="fw-semibold mb-0">Filter Tahun:</label>
+            <select name="tahun" class="form-select w-auto" onchange="this.form.submit()">
+                @foreach($tahunList as $t)
+                    <option value="{{ $t }}" {{ $t == $tahunDipilih ? 'selected' : '' }}>
+                        {{ $t }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </form>
+    <!--CARD RINGKASAN -->
     <div class="row g-3 mb-4">
 
         <div class="col-4">
@@ -18,7 +31,7 @@
                     Rp {{ number_format($totalPemasukan, 0, ',', '.') }}
                 </p>
                 <p class="rekap-card-meta">
-                    {{ $pemasukans->count() }} transaksi dikonfirmasi
+                    {{ $pemasukans->total() }} transaksi dikonfirmasi
                 </p>
             </div>
         </div>
@@ -30,7 +43,7 @@
                     Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
                 </p>
                 <p class="rekap-card-meta">
-                    {{ $pengeluarans->count() }} catatan pengeluaran
+                    {{ $pengeluarans->total() }} catatan pengeluaran
                 </p>
             </div>
         </div>
@@ -100,7 +113,7 @@
         </table>
         @if($pemasukans->hasPages())
             <div class="pagination-wrap">
-                {{ $data->links() }}
+                {{ $pemasukans->links() }}
             </div>
         @endif
 
@@ -174,7 +187,7 @@
         </table>
         @if($pengeluarans->hasPages())
             <div class="pagination-wrap">
-                {{ $data->links() }}
+                {{ $pengeluarans->links() }}
             </div>
         @endif
     <!-- </div> -->

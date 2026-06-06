@@ -27,8 +27,9 @@ class LayananPenyewaController extends Controller
         $reservasi = $this->getReservasiAktif();
         $banks     = Bank::all();
         $bulanIni   = date('Y-m-01');
+        $bulanDepan = date('Y-m-01', strtotime('+1 month'));
 
-        // Cek apakah bulan ini = bulan reservasi (sudah tercakup pembayaran awal)
+        // Cek apakah bulan ini = bulan reservasi 
         $bulanReservasi   = Carbon::parse($reservasi->tanggal_masuk)->format('Y-m-01');
         $isBulanReservasi = ($bulanIni === $bulanReservasi);
 
@@ -36,7 +37,15 @@ class LayananPenyewaController extends Controller
         $pembayaranBulanIni = Pembayaran::where('id_reservasi', $reservasi->id_reservasi)
                                         ->where('tipe_pembayaran', 'Perpanjangan')
                                         ->where('bulan_tagihan', $bulanIni)
+                                        ->orderByRaw("FIELD(status, 'Diterima', 'Dikirim', 'Ditolak')")
                                         ->first();
+
+        $pembayaranBulanDepan = Pembayaran::where('id_reservasi', $reservasi->id_reservasi)
+                                      ->where('tipe_pembayaran', 'Perpanjangan')
+                                      ->where('bulan_tagihan', $bulanDepan)
+                                      ->orderByRaw("FIELD(status, 'Diterima', 'Dikirim', 'Ditolak')")
+                                      ->first();
+
         $riwayatPembayaran = Pembayaran::where('id_reservasi', $reservasi->id_reservasi)
                                        ->where('tipe_pembayaran', 'Perpanjangan')
                                        ->with('bank')
@@ -51,7 +60,9 @@ class LayananPenyewaController extends Controller
             'reservasi',
             'banks',
             'bulanIni',
+            'bulanDepan',
             'pembayaranBulanIni',
+            'pembayaranBulanDepan',
             'riwayatPembayaran',
             'sudahBayarBulanIni',
             'statusBayar',
@@ -104,7 +115,7 @@ class LayananPenyewaController extends Controller
             'status'          => 'Dikirim',
         ]);
         return redirect('/perpanjangan')
-               ->with('success', 'Bukti pembayaran berhasil dikirim. Menunggu konfirmasi.');
+               ->with('success', 'Bukti pembayaran berhasil dikirim. Pembayaran perpanjangan mulai berlaku tanggal 1 bulan depan setelah dikonfirmasi admin');
     }
 
     //Pengaduan

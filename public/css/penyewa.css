@@ -37,8 +37,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.8rem;
+    margin-bottom: 1.5rem;
 }
+
+.tagihan-card-lunas    { border-color: #10b981; background: #f0fdf4; }
+.tagihan-card-menunggu { border-color: #f59e0b; background: #fffbeb; }
+.tagihan-card-default  { border-color: #e5e7eb; background: #f9fafb; }
 
 .tagihan-label {
     font-size: 0.82rem;
@@ -65,7 +69,10 @@
     background: #fff;
     border-radius: 12px;
     border: 1px solid #ebebeb;
-    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    overflow-x: auto;
 }
 
 .table-penyewa {
